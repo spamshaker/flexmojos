@@ -17,4 +17,4 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 -->
-<mx:Label xmlns:mx="http://www.adobe.com/2006/mxml" text="Hello World"/>
+<s:Label xmlns:mx="http://ns.adobe.com/mxml/2009" xmlns:s="library://ns.adobe.com/flex/spark" text="Hello World"/>

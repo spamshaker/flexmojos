@@ -19,63 +19,174 @@
 
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
 
-    <groupId>info.rvin.itest</groupId>
-    <artifactId>simple-air</artifactId>
-    <version>1.0-SNAPSHOT</version>
-    <packaging>pom</packaging>
+  <groupId>info.rvin.itest</groupId>
+  <artifactId>simple-air</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
 
-    <modules>
-        <module>air</module>
-        <module>swf</module>
-        <module>swc</module>
-    </modules>
+  <!-- root properties-->
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <flexmojos.version>7.0.1</flexmojos.version>
+    <flex.version>4.14.1.20150325</flex.version>
+    <air.version>18.0</air.version>
+    <targetPlayer.version>18.0</targetPlayer.version>
+    <flexUnit.version>4.3.0-SNAPSHOT</flexUnit.version>
+  </properties>
 
-    <build>
-        <sourceDirectory>src/main/flex</sourceDirectory>
-        <testSourceDirectory>src/test/flex</testSourceDirectory>
-        <plugins>
-            <plugin>
-                <groupId>net.flexmojos.oss</groupId>
-                <artifactId>flexmojos-maven-plugin</artifactId>
-                <version>%{flexmojos.version}</version>
-                <extensions>true</extensions>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.apache.flex</groupId>
-                        <artifactId>compiler</artifactId>
-                        <version>%{flex.version}</version>
-                        <type>pom</type>
-                    </dependency>
-                </dependencies>
-            </plugin>
-        </plugins>
-    </build>
+  <!-- MODULES-->
+  <modules>
+    <module>air</module>
+    <module>swf</module>
+    <module>swc</module>
+  </modules>
 
-    <dependencies>
-        <!-- Flex SDK dependencies -->
-        <dependency>
+
+  <build>
+    <sourceDirectory>src/main/flex</sourceDirectory>
+    <testSourceDirectory>src/test/flex</testSourceDirectory>
+    <plugins>
+      <plugin>
+        <groupId>net.flexmojos.oss</groupId>
+        <artifactId>flexmojos-maven-plugin</artifactId>
+        <version>${flexmojos.version}</version>
+        <extensions>true</extensions>
+        <configuration>
+          <storepass/>
+        </configuration>
+        <dependencies>
+          <dependency>
             <groupId>org.apache.flex</groupId>
-            <artifactId>framework</artifactId>
-            <version>%{flex.version}</version>
+            <artifactId>compiler</artifactId>
+            <version>${flex.version}</version>
             <type>pom</type>
-        </dependency>
-        <!-- Air SDK dependencies -->
-        <dependency>
-            <groupId>org.apache.flex.framework</groupId>
-            <artifactId>air</artifactId>
-            <version>%{flex.version}</version>
-            <type>pom</type>
-        </dependency>
-        <!-- Air runtime dependencies -->
-        <dependency>
-            <groupId>com.adobe.air</groupId>
-            <artifactId>framework</artifactId>
-            <version>%{air.version}</version>
-            <type>pom</type>
-        </dependency>
-    </dependencies>
+          </dependency>
+        </dependencies>
+      </plugin>
+    </plugins>
+  </build>
 
+  <dependencies>
+    <!-- Global SDK Dependencies this can be specified for each
+     module but usually framework is used in all child modules-->
+    <dependency>
+      <groupId>org.apache.flex</groupId>
+      <artifactId>framework</artifactId>
+      <type>pom</type>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.flex.framework</groupId>
+      <artifactId>air</artifactId>
+      <type>pom</type>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.flex.framework.air</groupId>
+      <artifactId>common-framework</artifactId>
+      <type>pom</type>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.flex.framework</groupId>
+      <artifactId>common-framework</artifactId>
+      <type>pom</type>
+    </dependency>
+    <dependency>
+      <groupId>com.adobe.flash.framework</groupId>
+      <artifactId>playerglobal</artifactId>
+      <type>swc</type>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.flex.flexunit</groupId>
+      <artifactId>flexunit-flex</artifactId>
+      <type>swc</type>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.flex.framework.themes</groupId>
+      <artifactId>spark</artifactId>
+      <version>${flex.version}</version>
+      <scope>theme</scope>
+      <type>swc</type>
+    </dependency>
+  </dependencies>
+
+  <!-- Dependency management -->
+  <dependencyManagement>
+    <dependencies>
+      <!-- Flex SDK dependencies -->
+      <dependency>
+        <groupId>org.apache.flex</groupId>
+        <artifactId>framework</artifactId>
+        <version>${flex.version}</version>
+        <type>pom</type>
+        <exclusions>
+          <exclusion>
+            <groupId>com.adobe.flash.framework</groupId>
+            <artifactId>playerglobal</artifactId>
+          </exclusion>
+        </exclusions>
+      </dependency>
+
+      <!-- Flex SDK commons-->
+      <dependency>
+        <groupId>org.apache.flex.framework</groupId>
+        <artifactId>common-framework</artifactId>
+        <version>${flex.version}</version>
+        <type>pom</type>
+      </dependency>
+
+      <!-- Air SDK dependencies -->
+      <dependency>
+        <groupId>org.apache.flex.framework</groupId>
+        <artifactId>air</artifactId>
+        <version>${flex.version}</version>
+        <type>pom</type>
+      </dependency>
+
+      <!-- AIR commons-->
+      <dependency>
+        <groupId>org.apache.flex.framework.air</groupId>
+        <artifactId>common-framework</artifactId>
+        <version>${flex.version}</version>
+        <type>pom</type>
+      </dependency>
+
+      <!-- Air runtime dependencies -->
+      <dependency>
+        <groupId>com.adobe.air</groupId>
+        <artifactId>framework</artifactId>
+        <version>${air.version}</version>
+        <type>pom</type>
+      </dependency>
+
+      <!-- Player Globals -->
+      <dependency>
+        <groupId>com.adobe.flash.framework</groupId>
+        <artifactId>playerglobal</artifactId>
+        <version>${targetPlayer.version}</version>
+        <type>swc</type>
+        <scope>provided</scope>
+      </dependency>
+
+      <dependency>
+        <groupId>org.apache.flex.flexunit</groupId>
+        <artifactId>flexunit-flex</artifactId>
+        <version>${flexUnit.version}</version>
+        <type>swc</type>
+        <scope>test</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <!-- Flexunit repo-->
+  <repositories>
+    <repository>
+      <id>apache.snapshots</id>
+      <url>https://repository.apache.org/content/repositories/public/</url>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
 </project>
